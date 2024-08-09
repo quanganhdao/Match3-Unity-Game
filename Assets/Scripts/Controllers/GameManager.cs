@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static eLevelMode currentMode;
     [SerializeField] ItemSkinSet skinSet;
     public event Action<eStateGame> StateChangedAction = delegate { };
 
@@ -72,7 +73,7 @@ public class GameManager : MonoBehaviour
     {
         State = state;
 
-        if(State == eStateGame.PAUSE)
+        if (State == eStateGame.PAUSE)
         {
             DOTween.PauseAll();
         }
@@ -85,22 +86,31 @@ public class GameManager : MonoBehaviour
     public void LoadLevel(eLevelMode mode)
     {
         m_boardController = new GameObject("BoardController").AddComponent<BoardController>();
-        m_boardController.StartGame(this, m_gameSettings, skinSet);
+        currentMode = mode;
+        m_boardController.StartGame(this, m_gameSettings, skinSet, ()=> AddWinCondition(currentMode));
 
         if (mode == eLevelMode.MOVES)
         {
+            Destroy(m_levelCondition);
             m_levelCondition = this.gameObject.AddComponent<LevelMoves>();
             m_levelCondition.Setup(m_gameSettings.LevelMoves, m_uiMenu.GetLevelConditionView(), m_boardController);
         }
         else if (mode == eLevelMode.TIMER)
         {
+            Destroy(m_levelCondition);
             m_levelCondition = this.gameObject.AddComponent<LevelTime>();
-            m_levelCondition.Setup(m_gameSettings.LevelMoves, m_uiMenu.GetLevelConditionView(), this);
+            m_levelCondition.Setup(m_gameSettings.LevelTime, m_uiMenu.GetLevelConditionView(), this);
         }
-
+        State = eStateGame.GAME_STARTED;
         m_levelCondition.ConditionCompleteEvent += GameOver;
 
-        State = eStateGame.GAME_STARTED;
+
+    }
+
+    public void AddWinCondition(eLevelMode mode)
+    {
+        
+
     }
 
     public void GameOver()

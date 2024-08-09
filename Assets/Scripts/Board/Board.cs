@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class Board
 {
+    private bool isInitialized;
     public enum eMatchDirection
     {
         NONE,
@@ -25,6 +26,10 @@ public class Board
 
     private int m_matchMin;
     ItemSkinSet skinSet;
+
+    public event Action OnLevelCreated;
+
+    public bool IsInitialized { get => isInitialized; private set => isInitialized = value; }
 
     public Board(Transform transform, GameSettings gameSettings, ItemSkinSet skinSet)
     {
@@ -74,7 +79,7 @@ public class Board
 
     }
 
-    internal void Fill()
+    internal IEnumerator Fill(Action callback=null)
     {
         for (int x = 0; x < boardSizeX; x++)
         {
@@ -108,8 +113,12 @@ public class Board
 
                 cell.Assign(item);
                 cell.ApplyItemPosition(false);
+                yield return new WaitForSeconds(0.02f);
             }
         }
+        isInitialized = true;
+        callback?.Invoke();
+        OnLevelCreated?.Invoke();
     }
 
     internal void Shuffle()

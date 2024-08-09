@@ -31,7 +31,7 @@ public class BoardController : MonoBehaviour
 
     private bool m_gameOver;
 
-    public void StartGame(GameManager gameManager, GameSettings gameSettings, ItemSkinSet skinSet)
+    public void StartGame(GameManager gameManager, GameSettings gameSettings, ItemSkinSet skinSet, Action callback)
     {
         m_gameManager = gameManager;
 
@@ -43,13 +43,16 @@ public class BoardController : MonoBehaviour
 
         m_board = new Board(this.transform, gameSettings, skinSet);
 
-        Fill();
+        Fill(callback);
     }
 
-    private void Fill()
+    private void Fill(Action callback)
     {
-        m_board.Fill();
-        FindMatchesAndCollapse();
+        StartCoroutine(m_board.Fill(() =>
+        {
+            callback?.Invoke();
+            FindMatchesAndCollapse();
+        }));
     }
 
     private void OnGameStateChange(GameManager.eStateGame state)
@@ -64,7 +67,7 @@ public class BoardController : MonoBehaviour
                 break;
             case GameManager.eStateGame.GAME_OVER:
                 m_gameOver = true;
-                StopHints();
+                //StopHints();
                 break;
         }
     }
@@ -78,14 +81,14 @@ public class BoardController : MonoBehaviour
         if (!m_hintIsShown)
         {
             m_timeAfterFill += Time.deltaTime;
-            if (m_timeAfterFill > m_gameSettings.TimeForHint)
+            if (m_timeAfterFill > m_gameSettings.TimeForHint &&m_board.IsInitialized)
             {
                 m_timeAfterFill = 0f;
                 ShowHint();
             }
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && m_board.IsInitialized)
         {
             var hit = Physics2D.Raycast(m_cam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if (hit.collider != null)
@@ -251,11 +254,8 @@ public class BoardController : MonoBehaviour
 
         yield return new WaitForSeconds(0.2f);
 
-        m_board.Fill();
+        StartCoroutine(m_board.Fill(FindMatchesAndCollapse));
 
-        yield return new WaitForSeconds(0.2f);
-
-        FindMatchesAndCollapse();
     }
 
     private IEnumerator ShuffleBoardCoroutine()
