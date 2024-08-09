@@ -9,8 +9,8 @@ public class Item
 {
     public Cell Cell { get; private set; }
 
-    public Transform View { get; private set; }
-
+    public Transform View { get; set; }
+    protected ItemSkinSet skinSet;
 
     public virtual void SetView()
     {
@@ -25,7 +25,19 @@ public class Item
             }
         }
     }
+    public virtual void SetView(ItemSkinSet skinSet)
+    {
+        string prefabname = GetPrefabName();
 
+        if (!string.IsNullOrEmpty(prefabname))
+        {
+            GameObject prefab = Resources.Load<GameObject>(prefabname);
+            if (prefab)
+            {
+                View = GameObject.Instantiate(prefab).transform;
+            }
+        }
+    }
     protected virtual string GetPrefabName() { return string.Empty; }
 
     public virtual void SetCell(Cell cell)

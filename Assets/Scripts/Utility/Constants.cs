@@ -23,4 +23,7 @@
     public const string PREFAB_BONUS_VERTICAL = "prefabs/itemBonusVertical";
 
     public const string PREFAB_BONUS_BOMB = "prefabs/itemBonusBomb";
+
+    public const string SO_FISH_ITEM_SKIN_SET = "FishSkinSet/FishSkinSet";
+    public const string PREFAB_ITEM_BASE = "prefabs/ItemBase";
 }

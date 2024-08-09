@@ -21,36 +21,46 @@ public class NormalItem : Item
     {
         ItemType = type;
     }
-
-    protected override string GetPrefabName()
+    public override void SetView(ItemSkinSet skinSet)
     {
-        string prefabname = string.Empty;
+
+        GameObject prefab = Resources.Load<GameObject>(Constants.PREFAB_ITEM_BASE);
+        if (prefab)
+        {
+            GameObject go = GameObject.Instantiate(prefab);
+            View = go.transform;
+            go.GetComponent<SpriteRenderer>().sprite = GetSkin(skinSet).skin;
+        }
+    }
+
+    public ItemSkin GetSkin(ItemSkinSet skinSet)
+    {
+        ItemSkin skin = null;
         switch (ItemType)
         {
             case eNormalType.TYPE_ONE:
-                prefabname = Constants.PREFAB_NORMAL_TYPE_ONE;
+                skin = skinSet.itemSkins[0];
                 break;
             case eNormalType.TYPE_TWO:
-                prefabname = Constants.PREFAB_NORMAL_TYPE_TWO;
+                skin = skinSet.itemSkins[1];
                 break;
             case eNormalType.TYPE_THREE:
-                prefabname = Constants.PREFAB_NORMAL_TYPE_THREE;
+                skin = skinSet.itemSkins[2];
                 break;
             case eNormalType.TYPE_FOUR:
-                prefabname = Constants.PREFAB_NORMAL_TYPE_FOUR;
+                skin = skinSet.itemSkins[3];
                 break;
             case eNormalType.TYPE_FIVE:
-                prefabname = Constants.PREFAB_NORMAL_TYPE_FIVE;
+                skin = skinSet.itemSkins[4];
                 break;
             case eNormalType.TYPE_SIX:
-                prefabname = Constants.PREFAB_NORMAL_TYPE_SIX;
+                skin = skinSet.itemSkins[5];
                 break;
             case eNormalType.TYPE_SEVEN:
-                prefabname = Constants.PREFAB_NORMAL_TYPE_SEVEN;
+                skin = skinSet.itemSkins[6];
                 break;
         }
-
-        return prefabname;
+        return skin;
     }
 
     internal override bool IsSameType(Item other)
