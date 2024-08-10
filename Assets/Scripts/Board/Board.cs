@@ -158,7 +158,10 @@ public class Board
 
                 NormalItem item = new NormalItem();
 
-                item.SetType(Utils.GetRandomNormalType());
+                var leastItemType = Utils.GetDifferentTypeWithSurrounded(m_cells, cell);
+
+                item.SetType(leastItemType
+                    );
                 item.SetView(skinSet);
                 item.SetViewRoot(m_root);
 
