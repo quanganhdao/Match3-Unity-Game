@@ -15,7 +15,7 @@ public class Utils
         return result;
     }
     /// <summary>
-    /// Get the type of item that has the least in the board
+    /// Get the type of item that has the least in the board and different with the neighbors
     /// </summary>
     /// <returns></returns>
     public static NormalItem.eNormalType GetDifferentTypeWithSurrounded(Cell[,] cells, Cell cellToSpawnItem)
