@@ -217,7 +217,7 @@ public class BoardController : MonoBehaviour
             listVert.Clear();
         }
 
-        return listHor.Concat(listVert).Distinct().ToList();
+        return new HashSet<Cell>(listHor.Concat(listVert)).ToList();
     }
 
     private void CollapseMatches(List<Cell> matches, Cell cellEnd)
