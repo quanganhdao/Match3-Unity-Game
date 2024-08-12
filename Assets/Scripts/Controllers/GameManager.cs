@@ -37,12 +37,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
+    [SerializeField]
     private GameSettings m_gameSettings;
 
 
     private BoardController m_boardController;
-
+    [SerializeField]
     private UIMainManager m_uiMenu;
 
     private LevelCondition m_levelCondition;
@@ -50,9 +50,10 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         State = eStateGame.SETUP;
-
+        if(m_gameSettings == null)
         m_gameSettings = Resources.Load<GameSettings>(Constants.GAME_SETTINGS_PATH);
 
+        if(m_uiMenu == null)
         m_uiMenu = FindObjectOfType<UIMainManager>();
         m_uiMenu.Setup(this);
     }

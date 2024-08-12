@@ -2492,6 +2492,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skinSet: {fileID: 11400000, guid: 17ba9d471f7477e47adccd0ea9b764f1, type: 2}
+  m_gameSettings: {fileID: 11400000, guid: 598718f9e5a14af49b65162e962b0ca1, type: 2}
+  m_uiMenu: {fileID: 2110808864}
 --- !u!4 &2136919903
 Transform:
   m_ObjectHideFlags: 0
